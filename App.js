@@ -1,33 +1,41 @@
 import { StatusBar } from 'expo-status-bar';
-import {Button, StyleSheet, Text, ScrollView, View} from 'react-native';
+import {Button, StyleSheet, Text, FlatList, TouchableOpacity, View} from 'react-native';
 import React, {useState} from "react";
 
 export default function App() {
     const [people, setPeople] = useState([
-        {name: 'first', key: '1'},
-        {name: 'second', key: '2'},
-        {name: 'third', key: '3'},
-        {name: 'fourth', key: '4'},
-        {name: 'fifth', key: '5'},
-        {name: 'sixth', key: '6'},
-        {name: 'seventh', key: '7'},
-        {name: 'eight', key: '8'},
-        {name: 'ninth', key: '9'},
-        {name: 'tenth', key: '10'},
-        {name: 'eleventh', key: '11'},
+        {name: 'first', id: '1'},
+        {name: 'second', id: '2'},
+        {name: 'third', id: '3'},
+        {name: 'fourth', id: '4'},
+        {name: 'fifth', id: '5'},
+        {name: 'sixth', id: '6'},
+        {name: 'seventh', id: '7'},
+        {name: 'eight', id: '8'},
+        {name: 'ninth', id: '9'},
+        {name: 'tenth', id: '10'},
+        {name: 'eleventh', id: '11'},
     ]);
+
+    const pressHandler = (id) => {
+        console.log(id);
+        setPeople((prevPeople) =>{
+            return prevPeople.filter(person => person.id !== id);
+        })
+    }
 
     return (
         <View style={styles.container}>
+            <FlatList
+                numColumns={2}
+                keyExtractor={(item) => item.id}
+                data={people}
+                renderItem={({item}) => (
+                    <TouchableOpacity onPress={() => pressHandler(item.id)}>
+                        <Text style={styles.person}>{item.name}</Text>
+                    </TouchableOpacity>
+                )}/>
 
-            {/*Using a ScrollView Component*/}
-            <ScrollView>
-                {people.map(person => (
-                        <View key={person.key}>
-                            <Text style={styles.person}>{person.name}</Text>
-                        </View>
-                ))}
-            </ScrollView>
         </View>
       );
 }
@@ -46,6 +54,7 @@ const styles = StyleSheet.create({
       marginBottom: 20,
       padding: 20,
       backgroundColor: 'grey',
-      fontSize: 24
+      fontSize: 24,
+      marginHorizontal: 10,
   }
 });
